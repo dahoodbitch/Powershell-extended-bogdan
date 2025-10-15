@@ -32,3 +32,6 @@ Teenuse Spooler oleku kontroll:
 
 RDP: suletud
 Port 7000: suletud
+
+Reaalajakaitse: lubatud, kiirskenni algatati
+erand lisatud

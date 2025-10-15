@@ -29,3 +29,6 @@ Teenuse Spooler oleku kontroll:
 Teenuse Spooler oleku kontroll:
 2025-10-15 15:13 Spooler: Taaskäivitus -> Running
 
+
+RDP: suletud
+Port 7000: suletud

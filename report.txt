@@ -17,3 +17,15 @@ task5.txt - 10/15/2025 14:49:05
 roll: mitte student
 kasutajanimi: 123
 
+
+Teenuse Spooler oleku kontroll:
+2025-10-15 15:11 Spooler: Taaskäivitus -> Running
+
+
+Teenuse Spooler oleku kontroll:
+2025-10-15 15:13 Spooler: Taaskäivitus -> Running
+
+
+Teenuse Spooler oleku kontroll:
+2025-10-15 15:13 Spooler: Taaskäivitus -> Running
+

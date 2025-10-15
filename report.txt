@@ -1,0 +1,16 @@
+Kaust 'C:\Lab\A' loomine õnnestus.
+plan.txt loodi ja esimene rida lisati.
+Loodi puuduv fail: task1.txt.
+Loodi puuduv fail: task2.txt.
+Loodi puuduv fail: task3.txt.
+Loodi puuduv fail: task4.txt.
+Loodi puuduv fail: task5.txt.
+
+Kausta 'C:\Lab\A' failid ja viimased muutmisaeg:
+plan.txt - 10/15/2025 14:49:05
+task1.txt - 10/15/2025 14:49:05
+task2.txt - 10/15/2025 14:49:05
+task3.txt - 10/15/2025 14:49:05
+task4.txt - 10/15/2025 14:49:05
+task5.txt - 10/15/2025 14:49:05
+

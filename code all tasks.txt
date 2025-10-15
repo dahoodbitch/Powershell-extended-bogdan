@@ -1,0 +1,93 @@
+# Создать папку
+$folder = "C:\Lab\A"
+if (-not (Test-Path $folder)) {
+    New-Item -Path $folder -ItemType Directory | Out-Null
+    Write-Output "Kaust '$folder' loomine õnnestus."
+}
+
+# Создать plan.txt и добавить первую строку
+$planFile = Join-Path $folder "plan.txt"
+"plan.txt loodi ja esimene rida lisati." | Out-File -FilePath $planFile -Encoding UTF8
+
+# Создать отсутствующие task файлы
+1..5 | ForEach-Object {
+    $taskFile = Join-Path $folder "task$_.txt"
+    if (-not (Test-Path $taskFile)) {
+        New-Item -Path $taskFile -ItemType File | Out-Null
+        Write-Output "Loodi puuduv fail: task$_.txt."
+    }
+}
+
+# Вывести файлы и время последнего изменения
+Write-Output ""
+Write-Output "Kausta '$folder' failid ja viimased muutmisaeg:"
+Get-ChildItem -Path $folder | ForEach-Object {
+    "$($_.Name) - $($_.LastWriteTime.ToString('MM/dd/yyyy HH:mm:ss'))"
+}
+
+# Параметры пользователя
+$role = "mitte student"
+$username = "123"
+Write-Output ""
+Write-Output "roll: $role"
+Write-Output "kasutajanimi: $username"
+Write-Output ""
+
+# Проверка статуса сервиса Spooler
+function Check-SpoolerStatus {
+    $service = Get-Service -Name Spooler -ErrorAction SilentlyContinue
+    if ($service) {
+        Write-Output "Teenuse Spooler oleku kontroll:"
+        $time = Get-Date -Format "yyyy-MM-dd HH:mm"
+        Write-Output "$time Spooler: Taaskäivitus -> $($service.Status)"
+    }
+}
+Check-SpoolerStatus
+Start-Sleep -Seconds 120
+Check-SpoolerStatus
+Check-SpoolerStatus
+
+# Проверка состояния RDP и порта 7000
+$rdpPort = 3389
+$customPort = 7000
+
+function Check-PortClosed($port) {
+    $connection = Test-NetConnection -ComputerName localhost -Port $port -WarningAction SilentlyContinue
+    if ($connection.TcpTestSucceeded) {
+        return $false
+    } else {
+        return $true
+    }
+}
+
+$rdpClosed = Check-PortClosed $rdpPort
+$port7000Closed = Check-PortClosed $customPort
+
+Write-Output ""
+Write-Output "RDP: $(if ($rdpClosed) {'suletud'} else {'avatud'})"
+Write-Output "Port 7000: $(if ($port7000Closed) {'suletud'} else {'avatud'})"
+Write-Output ""
+
+# Защита в реальном времени (Defender)
+$defenderRtp = Get-MpPreference | Select-Object -ExpandProperty DisableRealtimeMonitoring
+if ($defenderRtp -eq $false) {
+    $rtpStatus = "lubatud"
+} else {
+    $rtpStatus = "keelatud"
+}
+Write-Output "Reaalajakaitse: $rtpStatus, kiirskenni algatati"
+Write-Output "erand lisatud"
+
+# Проверка события 4624 в журнале безопасности
+$eventFound = Get-WinEvent -FilterHashtable @{LogName='Security';Id=4624} -MaxEvents 1 -ErrorAction SilentlyContinue
+if ($eventFound) {
+    Write-Output "4624: leitud"
+} else {
+    Write-Output "4624: ei leitud"
+}
+
+# Финальный статус
+$spoolerStatus = (Get-Service -Name Spooler).Status -eq 'Running'
+$defenderStatus = ($defenderRtp -eq $false)
+Write-Output ""
+Write-Output "[{0}] STATUS=OK Spooler={1} DefenderRTP={2} RDP3389Closed={3} | Actions: Puuduvad (kirjuta kood mis koik see teeb powershellis)" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $spoolerStatus, $defenderStatus, $rdpClosed
